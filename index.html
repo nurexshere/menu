@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hotel Menu</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: white;
+            background-image: url("images/cafe.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            
+
+		}
+
+		h1 {
+			text-align: center;
+			margin-top: 30px;
+			margin-bottom: 20px;
+            background-color: antiquewhite;
+            width: 20pc;
+            border-radius: 10%;
+            
+
+            
+		}
+
+        h2 {
+			text-align: center;
+			margin-top: 30px;
+			margin-bottom: 20px;
+            color: whitesmoke;
+            background-size: contain;
+            
+            
+		}
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			margin-bottom: 20px;
+			background-color:antiquewhite;
+			box-shadow: darkcyan;
+		}
+
+		th, td {
+			padding: 10px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+
+		th {
+			background-color: green;
+			color: white;
+			font-weight: normal;
+		}
+
+		td:first-child {
+			font-weight: bold;
+		}
+
+		input[type=checkbox] {
+			margin-right: 10px;
+		}
+
+		button[type=submit] {
+			background-color: green;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+			margin-top: 20px;
+			float: right;
+			box-shadow: black;
+		}
+
+		button[type=submit]:hover {
+			background-color: #3e8e41;
+		}
+
+		#order-summary {
+			background-color: transparent;
+			box-shadow: black;
+			padding: 20px;
+			margin-top: 30px;
+		}
+
+		#order-summary h2 {
+            text-align: center;
+			margin-top: 0;
+            color: whitesmoke;
+            background-color:black;
+            border-radius: 10%;
+            width: 20pc;
+            
+		}
+
+		#order-summary table {
+			margin-bottom: 20px;
+		}
+
+		#order-summary table th {
+			background-color: green;
+			color: white;
+			font-weight: normal;
+		}
+
+		#order-summary table td:first-child {
+			font-weight: bold;
+		}
+
+		#total-price {
+            background-color: antiquewhite;
+            width: 20pc;
+            border-radius: 10%;
+			font-weight: bold;
+			font-size: 20px;
+		}
+
+	</style>
+</head>
+<body >
+    
+	<h1>Hotel Menu</h1>
+	<form id="order-form">
+		<h2>Breakfast</h2>
+		<table>
+			<tr>
+				<th>Item</th>
+				<th>Price</th>
+				<th>Select</th>
+                
+			</tr>
+			<tr>
+				<td>ፍርፍር በእንቁላል </td>
+				<td>160 ብር</td>
+				<td><input type="checkbox" name="item" value=" ፍርፍር በእንቁላል " data-price="160" data-meal="breakfast"></td>
+                
+                
+
+			</tr>
+			<tr>
+				<td>ጨጨብሳ በማር</td>
+				<td>200 ብር</td>
+				<td><input type="checkbox" name="item" value="ጨጨብሳ በማር" data-price="200" data-meal="breakfast"></td>
+                
+			</tr>
+		</table>
+
+        <h2>Lunch</h2>
+		<table>
+			<tr>
+				<th>Item</th>
+				<th>Price</th>
+				<th>Select</th>
+                
+			</tr>
+			<tr>
+				<td>ስጋ ወጥ  </td>
+				<td>150 ብር</td>
+				<td><input type="checkbox" name="item" value="ስጋ ወጥ" data-price="150" data-meal="Lunch"></td>
+                
+			</tr>
+			<tr>
+				<td>በያይነት በፓስታ </td>
+				<td>100 ብር</td>
+				<td><input type="checkbox" name="item" value="በያይነት በፓስታ" data-price="100" data-meal="Lunch"></td>
+                
+			</tr>
+		</table>
+        <h2>Dinner</h2>
+		<table>
+			<tr>
+				<th>Item</th>
+				<th>Price</th>
+				<th>Select</th>
+                
+			</tr>
+			<tr>
+				<td>ጥብስ  </td>
+				<td>300 ብር</td>
+				<td><input type="checkbox" name="item" value="ጥብስ" data-price="300" data-meal="Dinner"></td>
+                
+			</tr>
+			<tr>
+				<td>ክትፎ በ ቆጮ </td>
+				<td>350 ብር </td>
+				<td><input type="checkbox" name="item" value="ክትፎ በ ቆጮ " data-price="350" data-meal="Dinner"></td>
+                
+			</tr>
+		</table>
+
+		<button type="submit">Place Order</button>
+	</form>
+	<div id="order-summary" style="display: none;">
+		<h2>Your Order</h2>
+		<table>
+			<tr>
+				<th>Item</th>
+				<th>Price</th>
+                
+			</tr>
+		</table>
+		<span><p>Total: <span id="total-price"></span></p></span>
+	</div>
+	<script>
+        
+		document.getElementById("order-form").addEventListener("submit", function(event) {
+			event.preventDefault();
+     
+			let orderSummary = document.getElementById("order-summary");
+			let orderTable = orderSummary.querySelector("table");
+			let totalPrice = orderSummary.querySelector("#total-price");
+			let items = document.querySelectorAll("input[type=checkbox]:checked");
+			let total = 0;
+			orderTable.innerHTML = "<tr><th>Item</th><th>Price</th></tr>";
+			items.forEach(function(item) {
+				let itemName = item.value;
+				let itemPrice = parseFloat(item.dataset.price);
+                total+= itemPrice;
+				let row = "<tr><td>" + itemName + "</td><td>" + itemPrice.toFixed(2) + "</td></tr>";
+				orderTable.innerHTML += row;
+			});
+			totalPrice.textContent = total.toFixed(2) + "ብር" ;
+			orderSummary.style.display = "block";
+		});
+	</script>
+</body>
+</html>
